@@ -21,5 +21,5 @@ urlpatterns = [
     path('activateuser/<uidb64>/<token>', views.ActivateAccount, name = 'ActivateAccount')
 ]
 
-if Settings.DEBUG:
+if Settings:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

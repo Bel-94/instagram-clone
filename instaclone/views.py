@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse
 
-from . import settings
+from Instagram import settings
 from .forms import UpdateUserForm, UpdateProfileForm, AddPostForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
