@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 from decouple import config
 import cloudinary, cloudinary.uploader, cloudinary.api
 from django.contrib.messages import constants as messages
@@ -161,3 +162,5 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'

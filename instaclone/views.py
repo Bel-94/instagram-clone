@@ -36,7 +36,7 @@ class EmailThread(threading.Thread):
 def send_activation_email(user, request):
     current_site = get_current_site(request)
     email_subject = 'Activate Your InstaPics Account'
-    email_body = render_to_string('Account Activation Email.html', {
+    email_body = render_to_string('activation_for_email.html', {
         'user': user,
         'domain': current_site,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -81,7 +81,7 @@ def Register(request):
             messages.success(request, '✅ Regristration Successful! An Activation Link Has Been Sent To Your Email')
             return redirect('Register')
 
-    return render(request, 'Register.html')
+    return render(request, 'register.html')
 
 def ActivateAccount(request, uidb64, token):
     try:
@@ -123,7 +123,7 @@ def Login(request):
             login(request, user)
             return redirect(reverse('Home'))
         
-    return render(request, 'Login.html')
+    return render(request, 'login.html')
 
 @login_required(login_url='Login')
 def Logout(request):
