@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'instaclone',
     'cloudinary',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
