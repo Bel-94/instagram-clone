@@ -183,3 +183,12 @@ def FollowUser(request, username):
             return redirect('UserProfile', username=username)
 
 # will add the search function here
+def SearchUsers(request):
+  if 'username' in request.GET and request.GET["username"]:
+      search_term = request.GET.get("username")
+      searched_users = Profile.search_by_profile(search_term)
+      message = f"{search_term}"
+      return render(request, "search.html",{"message":message,"users": searched_users})
+  else:
+      message = "You haven't searched for any term"
+      return render(request, 'search.html',{"message":message})
