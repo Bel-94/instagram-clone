@@ -21,6 +21,12 @@ class Profile(models.Model):
     def get_following(self): # people who the user follow
         return self.following.all()
     
+    # add the class method
+    @classmethod
+    def search_by_profile(cls, username):
+        certain_user = cls.objects.filter(user__username__icontains = username)
+        return certain_user
+    
     def __str__(self):
         return str(self.user)
     
