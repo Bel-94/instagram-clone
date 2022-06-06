@@ -17,8 +17,8 @@ urlpatterns = [
     path('logout', views.Logout, name="Logout"),
     path('follow/user/<str:username>', views.FollowUser, name="FollowUser"),
     path('post/<int:id>/comment', views.AddComment, name="AddComment"),
-    # path('search-results', views.Search, name="Search"),
-    path('activateuser/<uidb64>/<token>', views.ActivateAccount, name = 'ActivateAccount')
+    path('search-results', views.SearchUsers, name="SearchUsers"),
+    # path('activateuser/<uidb64>/<token>', views.ActivateAccount, name = 'ActivateAccount')
 ]
 
 if Settings:
