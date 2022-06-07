@@ -62,7 +62,7 @@ class Post(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['date_created']
+        ordering = ['-date_created']
 
 
 class Follow(models.Model):
@@ -70,16 +70,23 @@ class Follow(models.Model):
     following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
 
 class Comment(models.Model):
-    opinion = models.CharField(max_length=2200, verbose_name='Comment', null=False)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    content = models.TextField()
+    pub_date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
 
-    def display_comment(self,post_id):
-        comments = Comment.objects.filter(self = post_id)
-        return comments
+    def save_comment(self):
+        self.save()
+
+    def delete_comment(self):
+        self.delete()
+
+    @classmethod
+    def get_post_comments(cls, image):
+        return cls.objects.filter(image=image)
 
     def __str__(self):
-        return str(self.comment)
+        return self.comment
 
     class Meta:
-        verbose_name_plural = 'Comments'
+        ordering = ["-pub_date"]
