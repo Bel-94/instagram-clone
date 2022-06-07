@@ -26,19 +26,14 @@ from django.core.mail import EmailMessage
 # Create your views here.
 
 
-@login_required(login_url='Login')
-def Logout(request):
-    logout(request)
-    messages.success(request, '✅ Successfully Logged Out!')
-    return redirect(reverse('Login'))
 
-@login_required(login_url='Login')
+
 def welcome(request):
     posts = Post.objects.order_by('-date_created').all()
     profiles = Profile.objects.all()
     return render(request, 'index.html', {'posts':posts, 'profiles':profiles})
 
-@login_required(login_url='Login')
+
 def UserProfile(request, username):
     current_user = request.user
     profile = User.objects.get(username=username)
@@ -54,7 +49,7 @@ def UserProfile(request, username):
         is_followed=False
     return render(request, 'user_profile.html', {'profile':profile, 'profile_details':profile_details, 'images':images, 'images_count':images_count, 'followers':followers, 'following':following, 'current_user':current_user, 'is_followed':is_followed})
 
-@login_required(login_url='Login')
+
 def MyProfile(request, username):
     profile = User.objects.get(username=username)
     profile_details = Profile.objects.get(user = profile.id)
@@ -64,7 +59,7 @@ def MyProfile(request, username):
     following = Profile.get_following(self=profile)
     return render(request, 'my_profile.html', {'profile':profile, 'profile_details':profile_details, 'images':images, 'images_count':images_count, 'followers':followers, 'following':following})
 
-@login_required(login_url='Login')
+
 def EditProfile(request, username):
     user = User.objects.get(username=username)
     if request.method == 'POST':
@@ -85,22 +80,22 @@ def EditProfile(request, username):
 
     return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
-@login_required(login_url='Login')
-def Settings(request, username):
-    username = User.objects.get(username=username)
-    if request.method == "POST":
-        form = PasswordChangeForm(data=request.POST, user=request.user)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            messages.success(request, '✅ Your Password Has Been Updated Successfully!')
-            return redirect("MyProfile", username=username)
-        else:
-            messages.error(request, "⚠️ Your Password Wasn't Updated!")
-            return redirect("Settings", username=username)
-    else:
-        form = PasswordChangeForm(data=request.POST, user=request.user)
-        return render(request, "settings.html", {'form': form})
+
+# def Settings(request, username):
+#     username = User.objects.get(username=username)
+#     if request.method == "POST":
+#         form = PasswordChangeForm(data=request.POST, user=request.user)
+#         if form.is_valid():
+#             form.save()
+#             update_session_auth_hash(request, form.user)
+#             messages.success(request, '✅ Your Password Has Been Updated Successfully!')
+#             return redirect("MyProfile", username=username)
+#         else:
+#             messages.error(request, "⚠️ Your Password Wasn't Updated!")
+#             return redirect("Settings", username=username)
+#     else:
+#         form = PasswordChangeForm(data=request.POST, user=request.user)
+#         return render(request, "settings.html", {'form': form})
 
 def SingleImage(request, id):
     post = Post.objects.get(id = id)
@@ -111,7 +106,7 @@ def SingleImage(request, id):
     print(comments)
     return render(request, 'Post Details.html', {'post': post, 'comments':comments, 'likes':likes})
 
-@login_required(login_url='Login')
+
 def AddNewPost(request, username):
     form = AddPostForm()
     if request.method == "POST":
@@ -130,7 +125,7 @@ def AddNewPost(request, username):
         form = AddPostForm()
     return render(request, 'post.html', {'form':form})
 
-@login_required(login_url='Login')
+
 def AddComment(request, id):
     post = Post.objects.get(id=id)
     if request.method == "POST":
@@ -143,7 +138,7 @@ def AddComment(request, id):
         messages.error(request, "⚠️ Your Comment Wasn't Created!")
         return redirect('welcome')
 
-@login_required(login_url='Login')
+
 def PostLike(request,id):
     postTobeliked = Post.objects.get(id = id)
     currentUser = User.objects.get(id = request.user.id)
@@ -160,7 +155,7 @@ def PostLike(request,id):
             messages.success(request, '✅ You Successfully Liked The Post!')
             return redirect('welcome')
 
-@login_required(login_url='Login')
+
 def FollowUser(request, username):
     userTobefollowed = User.objects.get(username = username)
     currentUser = request.user
