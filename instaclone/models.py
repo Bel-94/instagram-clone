@@ -7,31 +7,31 @@ from cloudinary.models import CloudinaryField
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='User')
     bio = models.TextField(max_length=150, verbose_name='Bio', null=True)
-    profile_image = CloudinaryField('profile_image')
-    email_confirmed = models.BooleanField(default=False, verbose_name='Is Confirmed?')
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Date Created')
-    date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
+    profile_image = CloudinaryField('image')
+    followers = models.IntegerField(default=0)
+    following = models.IntegerField(default=0)
 
-    def get_posts(self):
-        return Post.objects.filter(user=self).all()
-
-    def get_followers(self): # people who follow the user
-        return self.followers.all()
-
-    def get_following(self): # people who the user follow
-        return self.following.all()
-    
-    # add the class method
-    @classmethod
-    def search_by_profile(cls, username):
-        certain_user = cls.objects.filter(user__username__icontains = username)
-        return certain_user
-    
     def __str__(self):
-        return str(self.user)
-    
-    class Meta:
-        verbose_name_plural = 'Profiles'
+        return self.user.username
+
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+        # @receiver(post_save, sender=User)
+
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
+
+    def save_profile(self):
+        self.user
+
+    def delete_profile(self):
+        self.delete()
+
+    @classmethod
+    def search_user(cls, username):
+        return User.objects.filter(username=username)
 
 class Post(models.Model):
     image = CloudinaryField('image')
