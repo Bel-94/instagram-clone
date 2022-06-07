@@ -37,10 +37,9 @@ class Post(models.Model):
     image = CloudinaryField('image')
     title = models.CharField(max_length=500, verbose_name='Caption', null=False)
     caption = models.CharField(max_length=2200, verbose_name='Caption', null=False)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Author')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Profile')
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Date Created')
-    date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
+    date_created = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(Profile, related_name="posts")
 
     def save_image(self):
         self.save()
@@ -48,27 +47,22 @@ class Post(models.Model):
     def delete_image(self):
         self.delete()
 
-    def get_posts(self):
-        return Post.objects.filter(user=self).all()
-    
-    def get_likes(self):
-        likes = Like.objects.filter(post=self)
-        return len(likes)
+    def update_caption(self, new_caption):
+        self.caption = new_caption
+        self.save()
 
-    def get_comments(self):
-        comments = Comment.objects.filter(post=self)
-        return comments
+    def like_count(self):
+        return self.likes.count()
 
     @classmethod
-    def update_caption(cls, id, title, caption, author, profile):
-        update = cls.objects.filter(id = id).update(title = title , caption = caption, author = author, profile = profile)
-        return update
+    def get_profile_images(cls, profile):
+        return cls.objects.filter(profile=profile)
     
     def __str__(self):
-        return str(self.title)
+        return self.title
 
     class Meta:
-        verbose_name_plural = 'Posts'
+        ordering = ['date_created']
 
 class Like(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
