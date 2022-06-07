@@ -64,9 +64,6 @@ class Post(models.Model):
     class Meta:
         ordering = ['date_created']
 
-class Like(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
