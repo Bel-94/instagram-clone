@@ -35,9 +35,9 @@ class Profile(models.Model):
 
 class Post(models.Model):
     image = CloudinaryField('image')
-    title = models.CharField(max_length=500, verbose_name='Caption', null=False)
-    caption = models.CharField(max_length=2200, verbose_name='Caption', null=False)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Profile')
+    title = models.CharField(max_length=30, null=False)
+    caption = models.CharField(max_length=2200, null=False)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(Profile, related_name="posts")
 
@@ -66,20 +66,16 @@ class Post(models.Model):
 
 
 class Follow(models.Model):
-    posted = models.DateTimeField(auto_now_add=True)
-    followed = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="profile_followed"
-    )
-    follower = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="profile_following"
-    )
+    posted = models.DateTimeField(auto_now_add=True, null=True)
+    followed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile_followed", default=0)
+    follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile_following", default=0)
 
     def __str__(self):
         return self.pk
 
 class Comment(models.Model):
-    content = models.TextField()
-    pub_date = models.DateField(auto_now_add=True)
+    content = models.TextField(max_length=150, null=True)
+    pub_date = models.DateField(auto_now_add=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
 
