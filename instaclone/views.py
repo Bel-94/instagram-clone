@@ -38,29 +38,29 @@ def home(request):
 
     logged_in = Profile.objects.get(user=current_user)
     timeline_images = []
-    current_images = Image.objects.filter(profile=logged_in)
+    current_images = Post.objects.filter(profile=logged_in)
     for current_image in current_images:
         timeline_images.append(current_image.id)
 
     current_following = Follow.objects.filter(follower=logged_in)
     for following in current_following:
         following_profile = following.followed
-        following_images = Image.get_profile_images(following_profile)
+        following_images = Post.get_profile_images(following_profile)
         for image in following_images:
             timeline_images.append(image.id)
 
-    display_images = Image.objects.filter(id=request.user.id).order_by("-post_date")
-    timeline = Image.objects.filter(pk__in=timeline_images).order_by("-post_date")
+    display_images = Post.objects.filter(id=request.user.id).order_by("-post_date")
+    timeline = Post.objects.filter(pk__in=timeline_images).order_by("-post_date")
 
     liked = False
     for i in display_images:
-        image = Image.objects.get(pk=i.id)
+        image = Post.objects.get(pk=i.id)
         liked = False
         if image.likes.filter(pk__in=timeline_images).exists():
             liked = True
 
     comments = Comment.objects.all()[:3]
-    comments_count = comments.count()
+    comments = comments.count()   #changed here to check incase i get an error
 
     suggestions = Profile.objects.all()[:4]
 
@@ -134,7 +134,7 @@ def profile(request, profile_id):
         elif "unfollow" in request.POST:
             form = UnfollowForm(request.POST)
             if form.is_valid():
-                this_unfollow = form.save(commit=False)
+                this_unfollow = form.save(commit=False)     #check on this later
                 is_unfollow = Follow.objects.filter(
                     followed=profile_followed, follower=profile_following
                 )
@@ -152,9 +152,9 @@ def profile(request, profile_id):
         form_follow = FollowForm()
         form_unfollow = UnfollowForm()
 
-    images = Image.objects.filter(profile=profile).order_by("-post_date")
-    images = Image.get_profile_images(profile=profile)
-    images = Image.objects.filter(profile=profile).order_by("-post_date")
+    images = Post.objects.filter(profile=profile).order_by("-post_date")
+    images = Post.get_profile_images(profile=profile)
+    images = Post.objects.filter(profile=profile).order_by("-post_date")
     posts = images.count()
 
     is_following = Follow.objects.filter(
@@ -191,9 +191,9 @@ def profile(request, profile_id):
 
 
 def comment(request, image_id):
-    image = Image.objects.get(pk=image_id)
+    image = Post.objects.get(pk=image_id)
     content = request.GET.get("comment")
-    print(content)
+    # print(content)
     user = request.user
     comment = Comment(image=image, content=content, user=user)
     comment.save_comment()
@@ -202,7 +202,7 @@ def comment(request, image_id):
 
 
 def like_image(request, image_id):
-    image = Image.objects.get(pk=image_id)
+    image = Post.objects.get(pk=image_id)
     liked = False
     current_user = request.user
     try:
@@ -223,10 +223,10 @@ def profile_edit(request):
     if request.method == "POST":
         form = EditBioForm(request.POST, request.FILES)
         if form.is_valid():
-            profile_pic = form.cleaned_data["profile_pic"]
+            profile_pic = form.cleaned_data["profile_image"]
             bio = form.cleaned_data["bio"]
             updated_profile = Profile.objects.get(user=current_user)
-            updated_profile.profile_pic = profile_pic
+            updated_profile.profile_image = profile_pic
             updated_profile.bio = bio
             updated_profile.save()
         return redirect("profile")
@@ -262,7 +262,7 @@ def email(request):
 
 
 def like_image(request, image_id):
-    image = Image.objects.get(pk=image_id)
+    image = Post.objects.get(pk=image_id)
     liked = False
     current_user = request.user
     try:
@@ -279,7 +279,7 @@ def like_image(request, image_id):
 
 def one_image(request, image_id):
     try:
-        image=Image.objects.get(pk=image_id)
+        image=Post.objects.get(pk=image_id)
     except Post.DoesNotExist:
         raise Http404()
 
