@@ -1,4 +1,4 @@
-from .models import Image, Profile, Follow, Comment
+from .models import Post, Profile, Follow, Comment
 from django.forms import ModelForm
 
 
@@ -10,7 +10,7 @@ class CreateProfileForm(ModelForm):
 
 class UploadImageForm(ModelForm):
     class Meta:
-        model = Image
+        model = Post
         exclude = ["profile", "post_date", "likes"]
 
 
