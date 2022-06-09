@@ -50,10 +50,15 @@
                 </a>
                 <span class="bg-white text-muted">{{image.caption}}</span>
                 <div class="text-muted bg-white" style="font-size: 1.4rem;margin-top: 1%;"></div>
-                {% for comment in comments %} {% if comment.image.id == image.id %} <div>
+                {% for context in context %} 
+                {% if comment.image.id == image.id %}
+                <div>
                   <a href="#" class="likes "><small class="profile_tag">{{comment.user}}</small></a>
                   <span class="post-link"><small class="text-muted">{{comment.content}}</small></span>
-                </div> {% endif %} {% endfor %} <div class="text-muted"> {{image.post_date | timesince }} ago </div>
+                </div> 
+                {% endif %} 
+                {% endfor %} 
+                <div class="text-muted"> {{image.post_date | timesince }} ago </div>
               </div>
             </div>
           </div>

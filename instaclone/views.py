@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -25,7 +26,7 @@ def create_profile(request):
 
     else:
         form = CreateProfileForm()
-    return render(request, "create_profile.html", {"form": form})
+    return render(request, "main/create_profile.html", {"form": form})
 
 
 @login_required(login_url="/accounts/login/")
@@ -60,22 +61,21 @@ def home(request):
             liked = True
 
     comments = Comment.objects.all()[:3]
-    comments = comments.count()   #changed here to check incase i get an error
+    comments_count  = comments.count()   #changed here to check incase i get an error
 
     suggestions = Profile.objects.all()[:4]
 
-    return render(
-        request,
-        "home.html",
-        {
-            "images": display_images,
+    context={
+
+        "images": display_images,
             "suggestions": suggestions,
             "loggedIn": logged_in,
             "liked": liked,
             "comments": comments,
             "timeline": timeline,
-        },
-    )
+    }
+
+    return render(request,"main/home.html", context=context)
 
 
 @login_required(login_url="/accounts/login/")
@@ -95,7 +95,7 @@ def upload_image(request):
         return redirect("home")
     else:
         form = UploadImageForm()
-    return render(request, "upload_image.html", {"form": form, "title": title})
+    return render(request, "main/upload_image.html", {"form": form, "title": title})
 
 def profile(request, profile_id):
     title = "Profile"
@@ -152,9 +152,9 @@ def profile(request, profile_id):
         form_follow = FollowForm()
         form_unfollow = UnfollowForm()
 
-    images = Post.objects.filter(profile=profile).order_by("-post_date")
+    images = Post.objects.filter(profile=profile).order_by("-date_created")
     images = Post.get_profile_images(profile=profile)
-    images = Post.objects.filter(profile=profile).order_by("-post_date")
+    images = Post.objects.filter(profile=profile).order_by("-date_created")
     posts = images.count()
 
     is_following = Follow.objects.filter(
@@ -195,7 +195,7 @@ def comment(request, image_id):
     content = request.GET.get("comment")
     # print(content)
     user = request.user
-    comment = Comment(image=image, content=content, user=user)
+    comment = Comment (content=context)
     comment.save_comment()
 
     return redirect("home")
@@ -218,21 +218,36 @@ def like_image(request, image_id):
     return HttpResponseRedirect(reverse("home"))
 
 
-def profile_edit(request):
-    current_user = request.user
+def update_profile(request,id):
+    user = User.objects.get(id=id)
+    profile = Profile.objects.get(user = user)
     if request.method == "POST":
-        form = EditBioForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile_pic = form.cleaned_data["profile_image"]
-            bio = form.cleaned_data["bio"]
-            updated_profile = Profile.objects.get(user=current_user)
-            updated_profile.profile_image = profile_pic
-            updated_profile.bio = bio
-            updated_profile.save()
-        return redirect("profile")
-    else:
-        form = EditBioForm()
-    return render(request, "edit_profile.html", {"form": form})
+            form = EditBioForm(request.POST,request.FILES,instance=profile)
+            if form.is_valid():
+                form.save()
+                return redirect('profile') 
+            else:
+                return render(request,'main/edit_profile.html',{'form':form})
+    else:        
+        form = EditBioForm(instance=profile)
+    return render(request, 'main/edit_profile.html', {'form':form})
+
+
+# def profile_edit(request):
+#     current_user = request.user
+#     if request.method == "POST":
+#         form = EditBioForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             profile_pic = form.cleaned_data["profile_image"]
+#             bio = form.cleaned_data["bio"]
+#             updated_profile = Profile.objects.get(user=current_user)
+#             updated_profile.profile_image = profile_pic
+#             updated_profile.bio = bio
+#             updated_profile.save()
+#         return redirect("profile")
+#     else:
+#         form = EditBioForm()
+#     return render(request, "main/edit_profile.html", {"form": form})
 
 @login_required(login_url="/accounts/login/")
 def search(request):
@@ -243,13 +258,13 @@ def search(request):
 
         return render(
             request,
-            "search.html",
+            "main/search.html",
             {"message": message, "searched_user": searched_user},
         )
 
     else:
         message = "You haven't searched for any term"
-    return render(request, "search.html", {"message": message})
+    return render(request, "main/search.html", {"message": message})
 
 
 @login_required(login_url="/accounts/login/")
@@ -283,4 +298,4 @@ def one_image(request, image_id):
     except Post.DoesNotExist:
         raise Http404()
 
-    return render(request, 'single-post.html',{"image":image})
+    return render(request, 'main/single_post.html',{"image":image})

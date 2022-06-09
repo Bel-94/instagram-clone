@@ -1,0 +1,8 @@
+{%extends "base.html"%} {% load bootstrap4 %} {% block content %}
+{% if form.errors %}
+Check your input
+
+{% endif %}
+Sign In
+{% csrf_token %} {% bootstrap_form form%}
+{% endblock %}
