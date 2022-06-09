@@ -49,8 +49,8 @@ def home(request):
         for image in following_images:
             timeline_images.append(image.id)
 
-    display_images = Post.objects.filter(id=request.user.id).order_by("-post_date")
-    timeline = Post.objects.filter(pk__in=timeline_images).order_by("-post_date")
+    display_images = Post.objects.filter(id=request.user.id).order_by("-date_created")
+    timeline = Post.objects.filter(pk__in=timeline_images).order_by("-date_created")
 
     liked = False
     for i in display_images:
