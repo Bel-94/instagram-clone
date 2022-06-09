@@ -32,6 +32,8 @@ def create_profile(request):
 @login_required(login_url="/accounts/login/")
 def home(request):
     current_user = request.user
+    print(current_user.profile.id)
+    
     try:
         logged_in = Profile.objects.get(user=current_user)
     except Profile.DoesNotExist:
@@ -96,6 +98,21 @@ def upload_image(request):
     else:
         form = UploadImageForm()
     return render(request, "main/upload_image.html", {"form": form, "title": title})
+
+# def profile(request):
+#     current_user = request.user
+#     user = User.objects.get(id = current_user.id)
+#     posts = Post.objects.filter(user = user.id)
+#     follow = Follow.objects.filter(follower_id = user.id)
+#     profile=Profile.filter_profile_by_id(user.id) 
+
+#     ctx = {
+#         "posts":posts,
+#         "profile":profile,
+#         'user':user,
+#         'follow':follow
+#         }  
+#     return render(request, 'profile/profile.html',ctx)
 
 def profile(request, profile_id):
     title = "Profile"
@@ -218,36 +235,36 @@ def like_image(request, image_id):
     return HttpResponseRedirect(reverse("home"))
 
 
-def update_profile(request,id):
-    user = User.objects.get(id=id)
-    profile = Profile.objects.get(user = user)
-    if request.method == "POST":
-            form = EditBioForm(request.POST,request.FILES,instance=profile)
-            if form.is_valid():
-                form.save()
-                return redirect('profile') 
-            else:
-                return render(request,'main/edit_profile.html',{'form':form})
-    else:        
-        form = EditBioForm(instance=profile)
-    return render(request, 'main/edit_profile.html', {'form':form})
-
-
-# def profile_edit(request):
-#     current_user = request.user
+# def update_profile(request,id):
+#     user = User.objects.get(id=id)
+#     profile = Profile.objects.get(user = user)
 #     if request.method == "POST":
-#         form = EditBioForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             profile_pic = form.cleaned_data["profile_image"]
-#             bio = form.cleaned_data["bio"]
-#             updated_profile = Profile.objects.get(user=current_user)
-#             updated_profile.profile_image = profile_pic
-#             updated_profile.bio = bio
-#             updated_profile.save()
-#         return redirect("profile")
-#     else:
-#         form = EditBioForm()
-#     return render(request, "main/edit_profile.html", {"form": form})
+#             form = EditBioForm(request.POST,request.FILES,instance=profile)
+#             if form.is_valid():
+#                 form.save()
+#                 return redirect('profile') 
+#             else:
+#                 return render(request,'main/edit_profile.html',{'form':form})
+#     else:        
+#         form = EditBioForm(instance=profile)
+#     return render(request, 'main/edit_profile.html', {'form':form})
+
+
+def profile_edit(request):
+    current_user = request.user
+    if request.method == "POST":
+        form = EditBioForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile_pic = form.cleaned_data["profile_image"]
+            bio = form.cleaned_data["bio"]
+            updated_profile = Profile.objects.get(user=current_user)
+            updated_profile.profile_image = profile_pic
+            updated_profile.bio = bio
+            updated_profile.save()
+        return redirect("profile")
+    else:
+        form = EditBioForm()
+    return render(request, "main/edit_profile.html", {"form": form})
 
 @login_required(login_url="/accounts/login/")
 def search(request):
