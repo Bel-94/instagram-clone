@@ -1,0 +1,37 @@
+{%extends "registration/base.html"%} {% load bootstrap4 %} {% load static %} {% block content %}
+<!-- CREATE PROFILE  -->
+<div class="container">
+    <div id="wrapper" id="content">
+        <div class="register card">
+            <div class="form-data form-data-prof">
+                <form action="{%url 'create_profile'%}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                    <div class="logo text-center mb-5 card-header bg-white">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png"
+                            alt="" style="width: 300px; height:auto;" class="">
+                    </div>
+                    <h2 class="intro">Create a profile to start using Instagram</h2> {% bootstrap_form form%} <button
+                        class="form-btn profile-btn" type="submit">Create Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END CREATE PROFILE  -->
+<!-- FOOTER  -->
+<footer class="mastfoot  mt-5">
+    <div class="inner">
+        <ul class="footer-flex">
+            <li class="text-muted">About</li>
+            <li class="text-muted">Blog</li>
+            <li class="text-muted">Jobs</li>
+            <li class="text-muted">Help</li>
+            <li class="text-muted">API</li>
+            <li class="text-muted">Privacy</li>
+            <li class="text-muted">Terms</li>
+            <li class="text-muted">TopAccounts</li>
+            <li class="text-muted">Hashtags</li>
+            <li class="text-muted">Locations</li>
+        </ul>
+        <p class="text-center text-muted mb-5">&copy;2021 Instragam from Joy</p>
+    </div>
+</footer> {% endblock %}

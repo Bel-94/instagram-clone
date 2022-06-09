@@ -1,0 +1,123 @@
+{% extends 'main/base.html' %} {% load bootstrap4 %} {% load static %} {% block content %} {{ block.super }} 
+<div class="main row">
+    <div class="col-xs-12 col-md-1"></div>
+    <div class="col-xs-12 col-md-6">
+      <div class="row" id="wrapper">
+        <div class="col-md-12">
+        </div>
+      </div>
+      <!-- START POSTS  -->
+      {% if timeline %}
+      {% for image in timeline %}
+        <div class="card mb-5">
+          <div class="card-header bg-white">
+            <div class="d-flex flex-row align-items-center">
+              <div class="rounded-circle overflow-hidden  border border-danger post-profile-photo mr-3">
+                <a href="/profile/{{image.profile.id}}">
+                  <img src="{{image.profile.profile_pic.url}}" alt="..."
+                    style="transform: scale(1.5); width: 32px;  height: 32px; position:relative; left: 0;"
+                    class="rounded-circle image">
+                </a>
+              </div>
+              <div class="profile">
+                <a href="/profile/{{image.profile.id}}" class="profile_tag">{{image.profile}}</a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="embed-responsive embed-responsive-1by1 x">
+              <a href="/image/{{image.id}}">
+                <img class="embed-responsive-item " src="{{image.image.url}}" />
+              </a>
+            </div>
+            <div class="d-flex flex-row justify-content-between pl-3 pr-3 pt-3 pb-1">
+              <ul class="list-inline d-flex flex-row align-items-center m-0">
+                <li class="list-inline-item">
+                  <form action="{% url 'like_image' image_id=image.id %}"> {% csrf_token %} <button type="submit"
+                      name="image_id" value={{image.id}}
+                      style="border: 0px; background-color: transparent; margin-bottom: 1rem;"><i
+                        class="far fa-heart"></i>
+                    </button>
+                  </form>
+                  <div class="liked-count bg-white">{{image.likes.count}} likes</div>
+                </li>
+              </ul>
+            </div>
+            <div class="pl-3 pr-3 pb-2">
+              <div class="post">
+                <a href="#" class="">
+                  <span class="post-link bg-white profile_tag">{{image.profile}}</span>
+                </a>
+                <span class="bg-white text-muted">{{image.caption}}</span>
+                <div class="text-muted bg-white" style="font-size: 1.4rem;margin-top: 1%;"></div>
+                {% for comment in comments %} {% if comment.image.id == image.id %} <div>
+                  <a href="#" class="likes "><small class="profile_tag">{{comment.user}}</small></a>
+                  <span class="post-link"><small class="text-muted">{{comment.content}}</small></span>
+                </div> {% endif %} {% endfor %} <div class="text-muted"> {{image.post_date | timesince }} ago </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="position-relative comment-box">
+            <form role="add_comment" , action="{% url 'comment' image_id=image.id %}"> {% csrf_token%} <div
+                class="input-group">
+                <input type="text" class="form-control" placeholder="Add a comment" name="comment"
+                  style="font-size: 1.2rem; border: 0;">
+                <div class="input-group-btn">
+                  <button class="btn" type="submit" style="font-size: 1.2rem;"> Post</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+      {% else %}
+      <div class="nothing text-center">
+        <h2>Follow a User or post an image to see images on the timeline.</h2>
+      </div>
+      {% endif %}
+    </div>
+    <div class="col-xs-12 col-md-1"></div>
+    <div class="col-xs-12 col-md-3">
+      <div class="mt-4 ml-5">
+        <div class="d-flex flex-row justify-content-between">
+          <small class="text-muted font-weight-normal">Suggestions For You</small>
+        </div> {% for prof in suggestions %} {% if prof == loggedIn%} {% else %} <div>
+          <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
+            <div class="d-flex flex-row align-items-center">
+              <div
+                class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
+                <a href="/profile/{{prof.id}}">
+                  <img src="{{prof.profile_pic.url}}" alt="..."
+                    style="transform: scale(1.5); width: 32px; height: 32px; position: relative;  left: 0;">
+                </a>
+              </div>
+              <div class="profile ml-3 ">
+                <a href="/profile/{{prof.id}}" class="profile_tag suggestion-text">{{prof.user.username}}</a>
+              </div>
+            </div>
+          </div> {% endif %} {% endfor %}
+        </div>
+        <!-- FOOTER  -->
+        <footer class="mastfoot mt-5 ml-5">
+          <div class="inner">
+            <ul class="footer-flex">
+              <li class="text-muted footer-text">About</li>
+              <li class="text-muted footer-text">Blog</li>
+              <li class="text-muted footer-text">Jobs</li>
+              <li class="text-muted footer-text">Help</li>
+              <li class="text-muted footer-text">API</li>
+              <li class="text-muted footer-text">Privacy</li>
+              <li class="text-muted footer-text">Terms</li>
+              <li class="text-muted footer-text">TopAccounts</li>
+              <li class="text-muted footer-text">Hashtags</li>
+              <li class="text-muted footer-text">Locations</li>
+            </ul>
+            <p class="text-center text-muted mb-5 copy">&copy;2022 InstaStar from Bel</p>
+          </div>
+        </footer>
+    </div>
+    <div class="col-xs-12 col-md-1"></div>
+  </div>
+
+  {% endblock %}

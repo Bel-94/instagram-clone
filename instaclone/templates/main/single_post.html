@@ -1,0 +1,78 @@
+{%extends 'main/base.html'%} {% load static %} {% load bootstrap4 %} {% block content %}
+<!-- DISPLAY SINGLE IMAGE  -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-12" style="display: flex; align-items: center; justify-content: center;">
+      <div class="card single-card">
+        <div class="card-header bg-white">
+          <div class="d-flex flex-row align-items-center">
+            <div
+              class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border border-danger post-profile-photo mr-3">
+              <a href="/profile/{{image.profile.id}}">
+                <img src="{{image.profile.profile_pic.url}}" alt="..."
+                  style="transform: scale(1.5); width: 32px;  height: 32px; position:relative; left: 0;"
+                  class="rounded-cirlce">
+              </a>
+            </div>
+            <div class="profile">
+              <a href="/profile/{{image.profile.id}}" class="profile_tag">{{image.profile}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="embed-responsive embed-responsive-1by1 x">
+            <img class="embed-responsive-item " src="{{image.image.url}}" />
+          </div>
+          <div class="d-flex flex-row justify-content-between pl-3 pr-3 pt-3 pb-1">
+            <ul class="list-inline d-flex flex-row align-items-center m-0">
+              <li class="list-inline-item">
+                <form action="{% url 'like_image' image_id=image.id %}"> {% csrf_token %} <button type="submit"
+                    name="image_id" value={{image.id}}
+                    style="border: 0px; background-color: transparent; margin-bottom: 1rem;"><i
+                      class="far fa-heart"></i>
+                  </button>
+                </form>
+                <div class="liked-count bg-white">{{image.likes.count}} likes</div>
+              </li>
+            </ul>
+          </div>
+          <div class="pl-3 pr-3 pb-2">
+            <div class="post">
+              <a href="#" class="">
+                <span class="post-link bg-white profile_tag">{{image.profile}}</span>
+              </a>
+              <span class="bg-white text-muted">{{image.caption}}</span>
+              <div class="text-muted bg-white" style="font-size: 1.4rem;margin-top: 1%;"></div>
+              {% for comment in comments %} {% if comment.image.id == image.id %} <div>
+                <a href="#" class="likes "><small class="profile_tag">{{comment.user}}</small></a>
+                <span class="post-link"><small class="text-muted">{{comment.content}}</small></span>
+              </div> {% endif %} {% endfor %} 
+              
+              <div class="text-muted"> {{image.post_date | timesince }} ago </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END OF SINGLE IMAGE POST  -->
+<!-- FOOTER  -->
+<footer class="mastfoot mt-auto">
+  <div class="inner">
+    <ul class="footer-flex">
+      <li class="text-muted">About</li>
+      <li class="text-muted">Blog</li>
+      <li class="text-muted">Jobs</li>
+      <li class="text-muted">Help</li>
+      <li class="text-muted">API</li>
+      <li class="text-muted">Privacy</li>
+      <li class="text-muted">Terms</li>
+      <li class="text-muted">TopAccounts</li>
+      <li class="text-muted">Hashtags</li>
+      <li class="text-muted">Locations</li>
+    </ul>
+    <p class="text-center text-muted mb-5">&copy;2022 InstaStar from Bel</p>
+  </div>
+</footer>
+<!-- END FOOTER --> {% endblock  %}

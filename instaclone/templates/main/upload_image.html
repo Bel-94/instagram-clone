@@ -1,0 +1,35 @@
+{%extends 'main/base.html'%} {% load static %} {% load bootstrap4 %} {% block content %}
+<!-- IMAGE UPLOAD FORM -->
+<div class="container">
+    <div id="wrapper" id="content">
+        <div class="register card mr-5 ml-5 mb-5 mt-5" style="padding: 20px;">
+            <div class="form-data">
+                <form action="{%url 'upload_image'%}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                    <div class=" intro card-header bg-white header text-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png"
+                            alt="Instagram-logo" class="card-img">
+                    </div>
+                     {% bootstrap_form form%} <button class="form-btn btn-primary" type="submit" style="padding: 5px 9px; border-radius: 10%;">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END IMAGE UPLOAD FORM  -->
+    <!-- FOOTER  -->
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <ul class="footer-flex">
+                <li class="text-muted">About</li>
+                <li class="text-muted">Blog</li>
+                <li class="text-muted">Jobs</li>
+                <li class="text-muted">Help</li>
+                <li class="text-muted">API</li>
+                <li class="text-muted">Privacy</li>
+                <li class="text-muted">Terms</li>
+                <li class="text-muted">TopAccounts</li>
+                <li class="text-muted">Hashtags</li>
+                <li class="text-muted">Locations</li>
+            </ul>
+            <p class="text-center text-muted mb-5">&copy;2022 InstaStar from Bel</p>
+        </div>
+    </footer> {% endblock %}
