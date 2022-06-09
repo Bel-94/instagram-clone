@@ -1,0 +1,79 @@
+{%extends 'base.html'%} {% load bootstrap4 %} {% load static %} {% block content %} <div class="container"
+  style="margin-top:8%">
+  <div class="content-section">
+    <div class="media">
+      <div class="container">
+        <div class="row"> {% if no_search %} <p class="text-center" style="font-size: 2rem;">{{no_search}}</p>
+          {% else %} {% if profile %} <div class="col-md-1"></div>
+          <div class="col-md-3">
+            <img class="rounded-circle account-img" src="{{profile.profile_pic.url}}"
+              style="width:12rem; height:12rem;object-fit: cover; margin-right: 3rem; border-radius: 50%;">
+          </div>
+          <div class="col-md-6 mt-3">
+            <div class="media-body">
+              <div class="account-heading"><span class="mr-3 text-secondary username">{{ profile.user.username }}</span>
+                <a class="btn btn-sm btn-outline-secondary mr-3" data-toggle="modal"
+                  data-target=".bd-example-modal-md"><strong>Edit Profile</strong></a>
+                <a class="mt-3" data-toggle="modal" data-target="#ModalCenter"><i class="fa fa-cog mt-3"
+                    id="cog"></i></a>
+              </div>
+              <div class="post-details mt-3 mb-3">
+                <span class="mr-5"><strong>{{images.count}}</strong> Posts</span>
+                <span class="mr-5"> <strong>{{profile.followers}}</strong> followers</span>
+                <span class="mr-5"> <strong>{{profile.following}}</strong> following</span>
+              </div>
+              <h5>{{ user.profile.name }}</h5>
+              <p class="text-secondary">{{ profile.bio }}</p> {%if profile.user.username == request.user.username%}
+              {% else%} {% if follow_form %} <form action="/profile/{{profile.id}}" method="post"
+                style="margin-top: 2rem;"> {%csrf_token%} {% bootstrap_form follow_form%} <input type="submit"
+                  class=" btn btn-primary" name="follow" value="Follow"
+                  style="background-color: #3897f0!important; padding: 6px 9px;">
+              </form> {% endif %} {% if unfollow_form %} <form action="/profile/{{profile.id}}" method="post"
+                style="margin-top: 2rem;"> {%csrf_token%} {% bootstrap_form unfollow_form%} <input type="submit"
+                  class=" btn btn-info" name="unfollow" value="Unfollow"
+                  style="color:#3897f0!important; padding: 6px 9px;">
+              </form> {% endif %} {% endif %}
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row"> {% if images %} {% for image in images %} <div class="col-md-4 col-sm-4"
+            style="object-fit: cover;">
+            <img src="{{image.image.url}}" alt="" style="width: 20rem; height: 20rem; object-fit: cover;" class="mt-5">
+          </div> {% endfor %} {% endif %} </div>
+      </div> {% else %} <h5 style="font-size: 2rem;">No user with username "{{search}}"</h5> {% endif %} {% endif %}
+    </div>
+    <div class="col-xs-12 col-md-3"></div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-sm" id="ModalCenter" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <a class="D-block mx-auto" href="{% url 'logout' %}">Log Out</a>
+        <hr>
+        <a class="D-block mx-auto" href="" data-dismiss="modal">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<footer class="mastfoot mt-auto">
+  <div class="inner">
+    <ul class="footer-flex">
+      <li class="text-muted">About</li>
+      <li class="text-muted">Blog</li>
+      <li class="text-muted">Jobs</li>
+      <li class="text-muted">Help</li>
+      <li class="text-muted">API</li>
+      <li class="text-muted">Privacy</li>
+      <li class="text-muted">Terms</li>
+      <li class="text-muted">TopAccounts</li>
+      <li class="text-muted">Hashtags</li>
+      <li class="text-muted">Locations</li>
+    </ul>
+    <p class="text-center text-muted mb-5">&copy;2022 InstaStar from Bel</p>
+  </div>
+</footer> {% endblock %}
