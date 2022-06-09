@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'instaclone',
     'cloudinary',
     'django_cleanup.apps.CleanupConfig',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [
