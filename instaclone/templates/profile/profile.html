@@ -31,20 +31,29 @@
               <p class="text-secondary">{{ profile.bio }}</p> 
               {%if profile.user.username == request.user.username%}
               {% else%} 
-              {% if follow_form %} <form action="/profile/{{profile.id}}" method="post"
+              {% if follow_form %} 
+              <form action="/profile/{{profile.id}}" method="post"
                 style="margin-top: 2rem;"> {%csrf_token%} {% bootstrap_form follow_form%} <input type="submit"
                   class=" btn btn-primary" name="follow" value="Follow"
                   style="background-color: #3897f0!important; padding: 6px 9px;">
-              </form> {% endif %} {% if unfollow_form %} <form action="/profile/{{profile.id}}" method="post"
-                style="margin-top: 2rem;"> {%csrf_token%} {% bootstrap_form unfollow_form%} <input type="submit"
-                  class=" btn btn-info" name="unfollow" value="Unfollow"
-                  style="color:#3897f0!important; padding: 6px 9px;">
-              </form> {% endif %} {% endif %}
+              </form> 
+              {% endif %} 
+              {% if unfollow_form %} 
+              <form action="/profile/{{profile.id}}" method="post"style="margin-top: 2rem;"> 
+                {%csrf_token%} 
+                {% bootstrap_form unfollow_form%} 
+                <input type="submit" class=" btn btn-info" name="unfollow" value="Unfollow" style="color:#3897f0!important; padding: 6px 9px;">
+              </form> 
+              {% endif %} 
+              {% endif %}
             </div>
           </div>
         </div>
         <hr>
-        <div class="row"> {% if images %} {% for image in images %} <div class="col-md-4 col-sm-4"
+        <div class="row"> 
+          {% if images %} 
+          {% for image in images %} 
+          <div class="col-md-4 col-sm-4"
             style="object-fit: cover;">
             <img src="{{image.image.url}}" alt="" style="width: 20rem; height: 20rem; object-fit: cover;" class="mt-5">
           </div> {% endfor %} {% endif %} </div>
