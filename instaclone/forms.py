@@ -1,3 +1,4 @@
+from django import forms
 from .models import Post, Profile, Follow, Comment
 from django.forms import ModelForm
 
@@ -30,3 +31,6 @@ class UnfollowForm(ModelForm):
     class Meta:
         model = Follow
         exclude = ["followed", "follower"]
+
+
+# comment form

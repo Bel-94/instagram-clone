@@ -5,9 +5,9 @@ from cloudinary.models import CloudinaryField
 # Create your models here.
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='User')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', verbose_name='User')
     bio = models.TextField(max_length=150, verbose_name='Bio', null=True)
-    profile_image = CloudinaryField('image')
+    profile_image = CloudinaryField('image', default='https://res.cloudinary.com/dz275mqsc/image/upload/v1654858776/default_nbsolf.png')
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
 

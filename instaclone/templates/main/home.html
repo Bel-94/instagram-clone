@@ -14,7 +14,7 @@
             <div class="d-flex flex-row align-items-center">
               <div class="rounded-circle overflow-hidden  border border-danger post-profile-photo mr-3">
                 <a href="/profile/{{image.profile.id}}">
-                  <img src="{{image.profile.profile_pic.url}}" alt="..."
+                  <img src="{{image.profile.profile_image.url}}" alt="..."
                     style="transform: scale(1.5); width: 32px;  height: 32px; position:relative; left: 0;"
                     class="rounded-circle image">
                 </a>
@@ -33,7 +33,8 @@
             <div class="d-flex flex-row justify-content-between pl-3 pr-3 pt-3 pb-1">
               <ul class="list-inline d-flex flex-row align-items-center m-0">
                 <li class="list-inline-item">
-                  <form action="{% url 'like_image' image_id=image.id %}"> {% csrf_token %} <button type="submit"
+                  <form action="{% url 'like_image' image_id=image.id %}"> {% csrf_token %} 
+                    <button type="submit"
                       name="image_id" value={{image.id}}
                       style="border: 0px; background-color: transparent; margin-bottom: 1rem;"><i
                         class="far fa-heart"></i>
@@ -63,9 +64,11 @@
             </div>
           </div>
           <hr>
+          
           <div class="position-relative comment-box">
-            <form role="add_comment" , action="{% url 'comment' image_id=image.id %}"> {% csrf_token%} <div
-                class="input-group">
+            <form role="add_comment" , action="{% url 'comment' image_id=image.id %}"> 
+              {% csrf_token%} 
+              <div class="input-group">
                 <input type="text" class="form-control" placeholder="Add a comment" name="comment"
                   style="font-size: 1.2rem; border: 0;">
                 <div class="input-group-btn">
@@ -93,7 +96,7 @@
               <div
                 class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
                 <a href="/profile/{{prof.id}}">
-                  <img src="{{prof.profile_pic.url}}" alt="..."
+                  <img src="{{prof.user.profile.profile_image.url}}" alt="..."
                     style="transform: scale(1.5); width: 32px; height: 32px; position: relative;  left: 0;">
                 </a>
               </div>

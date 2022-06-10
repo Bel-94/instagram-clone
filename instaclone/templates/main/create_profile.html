@@ -6,10 +6,11 @@
             <div class="form-data form-data-prof">
                 <form action="{%url 'create_profile'%}" method="post" enctype="multipart/form-data"> {% csrf_token %}
                     <div class="logo text-center mb-5 card-header bg-white">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png"
+                        <img src="{{user.profile.profile_image.url}}"
                             alt="" style="width: 300px; height:auto;" class="">
                     </div>
-                    <h2 class="intro">Create a profile to start using Instagram</h2> {% bootstrap_form form%} <button
+                    <h2 class="intro">Create a profile to start using Instagram</h2> {% bootstrap_form form%} 
+                    <button
                         class="form-btn profile-btn" type="submit">Create Profile</button>
                 </form>
             </div>

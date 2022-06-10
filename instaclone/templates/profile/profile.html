@@ -9,18 +9,17 @@
           {% if profile %} 
           <div class="col-md-1"></div>
           <div class="col-md-3">
-            <img class="rounded-circle account-img" src="{{profile.profile_pic.url}}"
-              style="width:12rem; height:12rem;object-fit: cover; margin-right: 3rem; border-radius: 50%;">
+            <img class="rounded-circle account-img" src="{{user.profile.profile_image.url}}"
+              style="width:12rem; height:12rem;object-fit: cover; margin-right: 3rem; border-radius: 50%;" alt="{{profile.user.username}}">
           </div>
 
           
           <div class="col-md-6 mt-3">
             <div class="media-body">
               <div class="account-heading"><span class="mr-3 text-secondary username">{{ profile.user.username }}</span>
-                <a href="/create_profile/" class="btn btn-sm btn-outline-secondary mr-3" data-toggle="modal"
-                  data-target=".bd-example-modal-md"><strong>Edit Profile</strong></a>
-                <a href="/create_profile/" class="mt-3" ata-toggle="modal" data-target="#ModalCenter"><i class="fa fa-cog mt-3"
-                    id="cog"></i></a>
+                <a href="{% url 'profile_edit'  %}" class="mt-3" ata-toggle="modal" data-target="#ModalCenter"><strong>Edit Profile</strong></a>
+                {% comment %} <a href="/create_profile/" class="mt-3" ata-toggle="modal" data-target="#ModalCenter"><i class="fa fa-cog mt-3"
+                    id="cog"></i></a> {% endcomment %}
               </div>
               <div class="post-details mt-3 mb-3">
                 <span class="mr-5"><strong>{{images.count}}</strong> Posts</span>
@@ -32,14 +31,14 @@
               {%if profile.user.username == request.user.username%}
               {% else%} 
               {% if follow_form %} 
-              <form action="/profile/{{profile.id}}" method="post"
+              <form action="/profile/{{profile.id}}/" method="post"
                 style="margin-top: 2rem;"> {%csrf_token%} {% bootstrap_form follow_form%} <input type="submit"
                   class=" btn btn-primary" name="follow" value="Follow"
                   style="background-color: #3897f0!important; padding: 6px 9px;">
               </form> 
               {% endif %} 
               {% if unfollow_form %} 
-              <form action="/profile/{{profile.id}}" method="post"style="margin-top: 2rem;"> 
+              <form action="/profile/{{profile.id}}/" method="post"style="margin-top: 2rem;"> 
                 {%csrf_token%} 
                 {% bootstrap_form unfollow_form%} 
                 <input type="submit" class=" btn btn-info" name="unfollow" value="Unfollow" style="color:#3897f0!important; padding: 6px 9px;">
@@ -56,8 +55,13 @@
           <div class="col-md-4 col-sm-4"
             style="object-fit: cover;">
             <img src="{{image.image.url}}" alt="" style="width: 20rem; height: 20rem; object-fit: cover;" class="mt-5">
-          </div> {% endfor %} {% endif %} </div>
-      </div> {% else %} <h5 style="font-size: 2rem;">No user with username "{{search}}"</h5> {% endif %} {% endif %}
+          </div> 
+          {% endfor %} 
+          {% endif %} 
+        </div>
+      </div> 
+      {% else %} 
+      <h5 style="font-size: 2rem;">No user with username "{{search}}"</h5> {% endif %} {% endif %}
     </div>
     <div class="col-xs-12 col-md-3"></div>
   </div>

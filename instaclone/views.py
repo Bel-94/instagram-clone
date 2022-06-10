@@ -62,10 +62,10 @@ def home(request):
         if image.likes.filter(pk__in=timeline_images).exists():
             liked = True
 
-    comments = Comment.objects.all()[:3]
+    comments = Comment.objects.all()
     comments_count  = comments.count()   #changed here to check incase i get an error
 
-    suggestions = Profile.objects.all()[:4]
+    suggestions = Profile.objects.all()
 
     context={
 
@@ -210,29 +210,29 @@ def profile(request, profile_id):
 def comment(request, image_id):
     image = Post.objects.get(pk=image_id)
     content = request.GET.get("comment")
-    # print(content)
+    print(content)
     user = request.user
-    comment = Comment (content=context)
+    comment = Comment(content=content, user=user)
     comment.save_comment()
 
     return redirect("home")
 
 
-def like_image(request, image_id):
-    image = Post.objects.get(pk=image_id)
-    liked = False
-    current_user = request.user
-    try:
-        profile = Profile.objects.get(user=current_user)
-    except Profile.DoesNotExist:
-        raise Http404()
-    if image.likes.filter(id=profile.id).exists():
-        image.likes.remove(profile)
-        liked = False
-    else:
-        image.likes.add(profile)
-        liked = True
-    return HttpResponseRedirect(reverse("home"))
+# def comment(request,post_id):
+#     current_user = request.user
+#     if request.method == 'POST':
+#         comment= request.POST.get('comment')
+#     post = Post.objects.get(id=post_id)
+#     user_profile = User.objects.get(username=current_user.username)
+#     Comment.objects.create(
+#          comment=comment,
+#          post = post,
+#          user=user_profile   
+#         )
+#     return redirect('Home' ,pk=post_id)
+
+
+
 
 
 # def update_profile(request,id):

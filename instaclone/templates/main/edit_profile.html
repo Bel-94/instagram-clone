@@ -1,10 +1,21 @@
 {%extends "main/base.html"%} 
-{% load bootstrap4 %} 
+{% load bootstrap4 %}
+{% load static %} 
 {% block content %}
 {% if form.errors %}
 Check your input
 
 {% endif %}
-Sign In
-{% csrf_token %} {% bootstrap_form form%}
+
+
+.<div class="panel-body">
+    <form action="/profile/edit/" method="post"> {% csrf_token %} 
+        {% bootstrap_form form%} 
+        <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-sm" value="Edit">
+      </div>
+       
+    </form>
+  </div>
+
 {% endblock %}
